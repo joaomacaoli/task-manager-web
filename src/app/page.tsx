@@ -1,3 +1,9 @@
+import Login from "@/components/login";
+
 export default function Home() {
-  return <h1>Hi!</h1>
+  return (
+    <section className="min-h-screen">
+      <Login />
+    </section>
+  )
 }
