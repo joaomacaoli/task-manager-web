@@ -18,10 +18,14 @@ export default function NavBar() {
         </li>
         <li>
           <Link href={`${env}/users`}>
-            Usuários
+            Users
           </Link>
         </li>
-        <li>Tasks</li>
+        <li>
+        <Link href={`${env}/tasks`}>
+            Tasks
+          </Link>
+        </li>
         {/* <li>
           <button className="bg-white text-amber-600 border-amber-500 px-4 py-2 rounded-full mr-4 hover:bg-amber-100">
             <Link href='#'>
