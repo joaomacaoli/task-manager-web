@@ -4,10 +4,27 @@ import { MdDelete } from "react-icons/md";
 
 type UserProps = { id: number; email: string; password: string; isActive: boolean }
 
+const env = process.env.NEXT_PUBLIC_API_PATH;
+
 export default async function Users() {
 
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_PATH}/users`);
-  const users = await response.json();
+  async function getAllUsers() {
+    try {
+      const response = await fetch(`${env}/users`, {
+        next: {
+          revalidate: 10
+        }
+      });
+      const users = await response.json();
+      return users
+
+    } catch (error) {
+      // setError('Erro ao fazer login');
+      console.error(error);
+    }
+  }
+
+  const users = await getAllUsers();
 
   return (
     <section className="bg-white border-2 border-amber-600 rounded-xl max-w-100 mx-auto p-3">
@@ -36,8 +53,8 @@ export default async function Users() {
               </td>
               <td>
                 <div className="flex gap-3">
-                  <FaUserEdit className="text-blue-800" />
-                  <MdDelete className="text-red-600" />
+                  <FaUserEdit />
+                  <MdDelete />
                 </div>
               </td>
             </tr>
