@@ -1,14 +1,13 @@
 'use client'
 
+import { login } from "@/services/auth-service";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiLockPasswordLine } from "react-icons/ri";
 
-const env = process.env.NEXT_PUBLIC_API_PATH
-
-export default function Login() {
+export default function LoginForm() {
   const [values, setValues] = useState({
     email: "",
     password: ""
@@ -26,45 +25,24 @@ export default function Login() {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    const token = await login(values.email, values.password)
 
-    try {
-      const response = await fetch(`${env}/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: values.email,
-          password: values.password
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`${response.status}`);
-      }
-
-      const result = await response.json();
-      const token = result.accessToken;
-
+    if (token) {
+      console.log("Login bem-sucedido!");
       localStorage.setItem('token', token);
-
-      if (token) {
-        console.log("Login bem-sucedido!");
-        // Redirecionando para a página "tasks" após o login
-        router.push("/tasks");
-      } else {
-        console.log("Falha no login.");
-      }
-
-    } catch (error) {
-      console.error("Error:", error);
+      router.push("/tasks");
+    } else {
+      console.log("Falha no login.");
     }
   }
 
   return (
     <section className="bg-white border-2 border-amber-600 rounded-xl max-w-80 mx-auto p-5">
       <div className="pb-4">
-        <form className="flex flex-col items-center w-full" onSubmit={handleSubmit}>
+        <form
+          className="flex flex-col items-center w-full"
+          onSubmit={handleSubmit}
+        >
           <h1 className="font-bold text-3xl text-amber-600 pb-4">User login</h1>
           <p className="py-4 px-3 m-2 w-full bg-gray-200 flex gap-3 rounded-full">
             <label htmlFor="form-login-email" className="text-xl text-gray-400">

@@ -1,9 +1,9 @@
-import Login from "@/components/login";
+import LoginForm from "@/components/login-form";
 
 export default function Home() {
   return (
     <section className="min-h-screen">
-      <Login />
+      <LoginForm />
     </section>
   )
 }
