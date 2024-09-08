@@ -1,12 +1,70 @@
+'use client'
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { FormEvent, useState } from "react";
 import { HiOutlineMail } from "react-icons/hi";
 import { RiLockPasswordLine } from "react-icons/ri";
 
+const env = process.env.NEXT_PUBLIC_API_PATH
+
 export default function Login() {
+  const [values, setValues] = useState({
+    email: "",
+    password: ""
+  })
+
+  const router = useRouter();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setValues({
+      ...values,
+      [name]: value
+    })
+  }
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    try {
+      const response = await fetch(`${env}/auth/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`${response.status}`);
+      }
+
+      const result = await response.json();
+      const token = result.accessToken;
+
+      localStorage.setItem('token', token);
+
+      if (token) {
+        console.log("Login bem-sucedido!");
+        // Redirecionando para a página "tasks" após o login
+        router.push("/tasks");
+      } else {
+        console.log("Falha no login.");
+      }
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   return (
     <section className="bg-white border-2 border-amber-600 rounded-xl max-w-80 mx-auto p-5">
       <div className="pb-4">
-        <form className="flex flex-col items-center w-full">
+        <form className="flex flex-col items-center w-full" onSubmit={handleSubmit}>
           <h1 className="font-bold text-3xl text-amber-600 pb-4">User login</h1>
           <p className="py-4 px-3 m-2 w-full bg-gray-200 flex gap-3 rounded-full">
             <label htmlFor="form-login-email" className="text-xl text-gray-400">
@@ -15,9 +73,13 @@ export default function Login() {
             <input
               id="form-login-email"
               type="email"
-              name="username"
+              name="email"
               placeholder="Email"
-              className="bg-gray-200 placeholder:text-gray-400 placeholder:font-semibold outline-none" />
+              value={values.email}
+              onChange={handleChange}
+              className="bg-gray-200 placeholder:text-gray-400 placeholder:font-semibold outline-none"
+              required
+            />
           </p>
           <p className="py-4 px-3 m-2 w-full bg-gray-200 flex gap-3 rounded-full">
             <label htmlFor="form-login-password" className="text-xl text-gray-400">
@@ -28,13 +90,17 @@ export default function Login() {
               type="password"
               name="password"
               placeholder="Senha"
-              className="bg-gray-200 placeholder:text-gray-400 placeholder:font-semibold outline-none" />
+              value={values.password}
+              onChange={handleChange}
+              className="bg-gray-200 placeholder:text-gray-400 placeholder:font-semibold outline-none"
+              required
+            />
           </p>
           <p className="py-1 m-2 w-full">
             <input
               type="submit"
               value="LOGIN"
-              className="bg-gradient-to-b from-amber-500 to-orange-700 text-white font-semibold text-sm px-4 py-3 rounded-full w-full"
+              className="bg-gradient-to-b from-amber-500 to-orange-700 text-white font-semibold text-sm px-4 py-3 rounded-full w-full cursor-pointer"
             />
           </p>
         </form>
