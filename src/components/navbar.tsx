@@ -1,34 +1,16 @@
-'use client'
-
 import Link from "next/link";
 import DropMenu from "./ui/drop-menu";
 
-const env = process.env.NEXT_PUBLIC_BASE_URL;
-
 export default function NavBar() {
-
-  function handleSingOutClick() {
-    localStorage.clear()
-    alert("Você foi deslogado.")
-  }
-
   return (
-    <nav className="py-5 mb-12 flex justify-between">
-      <h1 className="py-4 font-bold text-amber-600">
-        <Link href={`${env}`}>
+    <nav className="py-5 mb-12 flex justify-between text-amber-600">
+      <h1 className="py-4 font-bold">
+        <Link href={`${process.env.NEXT_PUBLIC_BASE_URL}`}>
           Task Manager
         </Link>
       </h1>
 
-      <div className="flex items-center gap-2 text-amber-600">
-        <button
-          onClick={handleSingOutClick}
-          className="bg-white border-amber-500 px-4 py-2 rounded-full mr-4 hover:bg-amber-100"
-        >
-          <Link href={`${env}`}>
-            SingOut
-          </Link>
-        </button>
+      <div className="flex gap-2">
         <DropMenu />
       </div>
     </nav>

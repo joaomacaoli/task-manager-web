@@ -1,3 +1,5 @@
+'use client'
+
 import Link from "next/link";
 import { FaUser } from "react-icons/fa";
 
@@ -13,6 +15,11 @@ const linksNav = [
   { label: 'Cadastrar', href: 'singup' },
 ]
 
+function handleSingOutClick() {
+  localStorage.clear()
+  alert("Você foi deslogado.")
+}
+
 export default function DropMenu() {
   return (
     <Menu>
@@ -27,6 +34,11 @@ export default function DropMenu() {
             </div>
           </MenuItem>
         ))}
+        <MenuItem>
+          <div className="block data-[focus]:bg-amber-100 text-amber-600 p-1">
+            <Link onClick={handleSingOutClick} href={`${env}`}>SingOut</Link>
+          </div>
+        </MenuItem>
       </MenuItems>
     </Menu>
   )
