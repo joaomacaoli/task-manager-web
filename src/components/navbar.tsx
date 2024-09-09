@@ -14,7 +14,7 @@ export default function NavBar() {
 
   return (
     <nav className="py-5 mb-12 flex justify-between">
-      <h1 className="py-4 font-bold text-orange-700">
+      <h1 className="py-4 font-bold text-amber-600">
         <Link href={`${env}`}>
           Task Manager
         </Link>

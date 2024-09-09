@@ -10,7 +10,7 @@ const linksNav = [
   { label: 'Usuários', href: 'users' },
   { label: 'Tarefas', href: 'tasks' },
   { label: 'Login', href: 'login' },
-  { label: 'Cadastrar', href: 'singin' },
+  { label: 'Cadastrar', href: 'singup' },
 ]
 
 export default function DropMenu() {
@@ -21,11 +21,10 @@ export default function DropMenu() {
       </MenuButton>
       <MenuItems className="data-[active]:bg-amber-100" anchor="bottom">
         {linksNav.map((link) => (
-          <MenuItem
-            key={link.label}
-            className="block data-[focus]:bg-amber-100 text-amber-600"
-          >
-            <Link href={`${env}/${link.href}`}>{link.label}</Link>
+          <MenuItem key={link.label}>
+            <div className="block data-[focus]:bg-amber-100 text-amber-600 p-1">
+              <Link href={`${env}/${link.href}`}>{link.label}</Link>
+            </div>
           </MenuItem>
         ))}
       </MenuItems>
